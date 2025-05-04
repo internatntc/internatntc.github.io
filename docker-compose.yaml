@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: mapdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./dummy_towers.sql:/docker-entrypoint-initdb.d/dummy_towers.sql
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: django_container
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py loaddata initial_data.json &&
+             gunicorn your_project_name.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_NAME=mapdata
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=admin
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+
+volumes:
+  postgres_data:

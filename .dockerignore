@@ -1,0 +1,85 @@
+
+# Geojson
+forest.geojson
+# municipalities.geojson
+rivers.geojson
+# wards.geojson
+waterways.geojson
+
+# MD file
+database.md
+
+# Adobe Illustrator files 
+*.ai
+
+# Docker
+# Dockerfile
+# docker-compose.yaml
+
+# Virtual environment
+venv/
+.venv/
+env/
+.env
+
+# Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Logs and databases
+*.log
+*.sqlite3
+dummy_towers.sql
+
+# Ipynb
+**/*.Ipynb
+
+# Ms Doc
+**/*.docx
+
+# Extras
+generate_dummy_phone.py
+database.md
+
+# Adobe Illustrator files 
+*.ai
+
+# Docker
+# Dockerfile
+# docker-compose.yaml
+
+# Virtual environment
+venv/
+.venv/
+env/
+.env
+
+# Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Logs and databases
+*.log
+*.sqlite3
+dummy_towers.sql
+
+# Ipynb
+**/*.Ipynb
+
+# Ms Doc
+**/*.docx
+
+# Extras
+generate_dummy_phone.py
