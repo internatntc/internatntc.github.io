@@ -62,7 +62,7 @@ jobs:
 
       - name: Run Django migrations
         env:
-          FIREBASE_CREDENTIALS_PATH: ${{ secrets.FIREBASE_CREDENTIALS_PATH }}
+          FIREBASE_CREDENTIALS_PATH: ./TowerMap/Firebase/towermap-b98ee-firebase-adminsdk-fbsvc-d502a34283.json
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
           FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
