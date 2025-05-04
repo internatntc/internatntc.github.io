@@ -67,6 +67,7 @@ jobs:
           DATABASE_PASSWORD: admin
           DATABASE_HOST: localhost
           DATABASE_PORT: 5432
+          FIREBASE_CREDENTIALS_PATH: ./TowerMap/Firebase/towermap-b98ee-firebase-adminsdk-fbsvc-d502a34283.json
         run: |
           cd ./TowerMap/
           python manage.py makemigrations
@@ -77,7 +78,7 @@ jobs:
           PGPASSWORD: admin
         run: |
           psql -U postgres -h localhost -p 5432 -d mapdata -f dummy_towers.sql
-          
+
       - name: Run tests
         run: |
           cd ./TowerMap/

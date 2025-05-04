@@ -9,7 +9,7 @@ import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/fir
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-import firebaseConfig from './firebase_config.js';
+// import firebaseConfig from './firebase_config.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

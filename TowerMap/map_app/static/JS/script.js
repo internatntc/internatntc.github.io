@@ -169,11 +169,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Load all data first
     Promise.all([
-        fetch('/static/JSON/Nepal_.geojson').then(res => res.json()),
-        fetch('/static/JSON/provinces.geojson').then(res => res.json()),
-        fetch('/static/JSON/districts.geojson').then(res => res.json()),
-        fetch('/static/JSON/municipalities.geojson').then(res => res.json()),
-        fetch('/static/JSON/wards.geojson').then(res => res.json()),
+        fetch('https://internatntc.github.io/TowerMap/map_app/static/JSON/Nepal_.geojson').then(res => res.json()),
+        fetch('https://internatntc.github.io/TowerMap/map_app/static/JSON/provinces.geojson').then(res => res.json()),
+        fetch('https://internatntc.github.io/TowerMap/map_app/static/JSON/districts.geojson').then(res => res.json()),
+        // fetch('/static/JSON/municipalities.geojson').then(res => res.json()),
+        // fetch('/static/JSON/wards.geojson').then(res => res.json()),
 
     ]).then(([nepalData, provincesData, districtsData, municipalitiesData, wardsData]) => {
         allDistricts = districtsData;
