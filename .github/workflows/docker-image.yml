@@ -47,6 +47,7 @@ jobs:
           DATABASE_HOST: localhost
           DATABASE_PORT: 5432
         run: |
+          cd ./TowerMap/
           python manage.py makemigrations
           python manage.py migrate
 
@@ -79,4 +80,5 @@ jobs:
 
       - name: Run tests
         run: |
+          cd ./TowerMap/
           python manage.py runserver
