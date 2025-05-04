@@ -1,0 +1,107 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
+        <!-- Jquery  -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <!-- D3 Library -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"
+            integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+        <!-- Main Content -->
+        <header>
+            <div class="app-body">
+                <div class="container d-flex justify-content-center align-items-center mt-5">
+                    <div class="col-lg-6 col-sm-12">
+                        <!-- Django Messages -->
+                        {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        {% endfor %}
+                {% endif %}
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>
+                                    <i class="bi bi-upc-scan mx-2"></i>
+                                    Login to NTC_Intern
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <!-- Django Form -->
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <!-- Add CSRF token for security -->
+                                    <div class="form-group">
+                                        <label for="username">
+                                            <i class="bi bi-input-cursor-text mx-2"></i>
+                                            Username
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="username"
+                                            name="username"
+                                            required
+                                        >
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                        <label for="password">
+                                            <i class="bi bi-lock mx-2"></i>
+                                            Password
+                                        </label>
+                                        <input
+                                            type="password"
+                                            class="form-control"
+                                            id="password"
+                                            name="password"
+                                            required
+                                        >
+                                    </div>
+                                    <br>
+                                    <a href="#" onclick="document.getElementById('forgot-msg').style.display='block'; return false;">
+                                        Forgot Password?
+                                    </a>
+                                    <p id="forgot-msg" style="display:none; color: red; margin-top: 10px;">
+                                        Please contact the administrator to request a password change.
+                                    </p>
+                                    <br>
+                                    <button type="submit" class="btn mt-2 btn-primary form-control">
+                                        Login
+                                        <i class="bi bi-box-arrow-in-right mx-2"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <footer class="bg-dark text-white text-center py-3 mt-auto">
+            <span>© NTC_Intern 2025 | 2082</span>
+        </footer>
+    </body>
+</html>

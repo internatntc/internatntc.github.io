@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h3><i class="bi bi-person-plus"></i> Create New User</h3>
+    <div class="d-flex mb-3">
+        <a href="{% url 'rbac:user_roles_view' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Back to Users
+        </a>
+    </div>
+    
+    <form method="post" class="card p-4 mt-3">
+        {% csrf_token %}
+        
+        <div class="row g-3">
+            <!-- Basic Information -->
+            <div class="col-md-4">
+                <label for="id_first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="id_first_name" name="first_name" 
+                       value="{{ form.first_name.value|default:'' }}" required>
+                {% if form.first_name.errors %}
+                    <div class="text-danger">{{ form.first_name.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-4">
+                <label for="id_middle_name" class="form-label">Middle Name</label>
+                <input type="text" class="form-control" id="id_middle_name" name="middle_name" 
+                       value="{{ form.middle_name.value|default:'' }}">
+            </div>
+            
+            <div class="col-md-4">
+                <label for="id_last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="id_last_name" name="last_name" 
+                       value="{{ form.last_name.value|default:'' }}" required>
+                {% if form.last_name.errors %}
+                    <div class="text-danger">{{ form.last_name.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Contact Information -->
+            <div class="col-md-6">
+                <label for="id_email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="id_email" name="email" 
+                       value="{{ form.email.value|default:'' }}" required>
+                {% if form.email.errors %}
+                    <div class="text-danger">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-6">
+                <label for="id_phone_number" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="id_phone_number" name="phone_number" 
+                       value="{{ form.phone_number.value|default:'' }}">
+            </div>
+            
+            <!-- Address -->
+            <div class="col-12">
+                <label for="id_address" class="form-label">Address</label>
+                <textarea class="form-control" id="id_address" name="address" 
+                          rows="3">{{ form.address.value|default:'' }}</textarea>
+            </div>
+            
+            <!-- Authentication -->
+            <div class="col-md-6">
+                <label for="id_username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="id_username" name="username" 
+                       value="{{ form.username.value|default:'' }}" required>
+                {% if form.username.errors %}
+                    <div class="text-danger">{{ form.username.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-6">
+                <label for="id_password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="id_password" name="password" required>
+                {% if form.password.errors %}
+                    <div class="text-danger">{{ form.password.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Role Selection -->
+            <div class="col-md-12">
+                <label for="id_role" class="form-label">Role</label>
+                <select class="form-select" id="id_role" name="role" required>
+                    {% for role in form.role.field.queryset %}
+                        <option value="{{ role.pk }}" {% if form.role.value == role.pk %}selected{% endif %}>
+                            {{ role.name }} (Level {{ role.hierarchy_level }})
+                        </option>
+                    {% endfor %}
+                </select>
+                {% if form.role.errors %}
+                    <div class="text-danger">{{ form.role.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-person-plus"></i> Create User
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">
+                <i class="bi bi-person-vcard mx-2"></i>
+                Assign Role to User: {{ user.username }}</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="role">Select Role</label>
+                    <select class="form-control" id="role" name="role" required>
+                        <option value="">-- Select Role --</option>
+                        {% for role in roles %}
+                        <option value="{{ role.id }}" {% if current_role and role.id == current_role.id %}selected{% endif %}>
+                            {{ role.name }} (Level {{ role.hierarchy_level }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br>
+                <div class="current-role-info mb-4">
+                    {% if current_role %}
+                    <div class="alert alert-info">
+                        <strong>Current Role:</strong> {{ current_role.name }} (Level {{ current_role.hierarchy_level }})
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning">
+                        This user currently has no role assigned
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'rbac:user_roles_view' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-user-tag"></i> Assign Role
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

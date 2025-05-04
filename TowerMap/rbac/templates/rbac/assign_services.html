@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>
+        <i class="bi bi-boxes mx-2"></i>
+        Assign Services to Role: {{ role.name }}</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <!-- Add this debug info at the top of your template -->
+<div class="alert alert-info">
+    <h4>Debug Info</h4>
+    <p>Current user's role: {{ request.user.role_assignment.role.name }}</p>
+    <p>Services available to current user's role:</p>
+    <ul>
+        {% for service in services %}
+        <li>{{ service.name }} (ID: {{ service.id }})</li>
+        {% endfor %}
+    </ul>
+    <p>Assigned to target role: {{ assigned_service_ids }}</p>
+</div>
+
+<!-- Your existing checkbox code -->
+{% for service in services %}
+    <div class="col-md-6 mb-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" 
+                   name="services" value="{{ service.id }}"
+                   id="service_{{ service.id }}"
+                   {% if service.id in assigned_service_ids %}checked{% endif %}>
+            <label class="form-check-label" for="service_{{ service.id }}">
+                <strong>{{ service.name }}</strong>
+                <div class="text-muted small">{{ service.description }}</div>
+                <code>{{ service.view_name }}</code>
+            </label>
+        </div>
+    </div>
+{% empty %}
+    <div class="col-12">
+        <div class="alert alert-warning">No services available to assign</div>
+    </div>
+{% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{% url 'rbac:admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
