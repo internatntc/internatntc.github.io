@@ -38,24 +38,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r ./TowerMap/requirements.txt
-
-      - name: Run Django migrations
-        env:
-          DATABASE_NAME: mapdata
-          DATABASE_USER: postgres
-          DATABASE_PASSWORD: admin
-          DATABASE_HOST: localhost
-          DATABASE_PORT: 5432
-        run: |
-          cd ./TowerMap/
-          python manage.py makemigrations
-          python manage.py migrate
-
-      - name: Load SQL data into Postgres
-        env:
-          PGPASSWORD: admin
-        run: |
-          psql -U postgres -h localhost -p 5432 -d mapdata -f dummy_towers.sql
       
       - name: Set Firebase credentials and save to file
         env:
@@ -78,6 +60,24 @@ jobs:
         run: |
           echo "Firebase secrets are set!"
 
+      - name: Run Django migrations
+        env:
+          DATABASE_NAME: mapdata
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: admin
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+        run: |
+          cd ./TowerMap/
+          python manage.py makemigrations
+          python manage.py migrate
+
+      - name: Load SQL data into Postgres
+        env:
+          PGPASSWORD: admin
+        run: |
+          psql -U postgres -h localhost -p 5432 -d mapdata -f dummy_towers.sql
+          
       - name: Run tests
         run: |
           cd ./TowerMap/
