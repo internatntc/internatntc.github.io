@@ -87,6 +87,8 @@ jobs:
           psql -U postgres -h localhost -p 5432 -d mapdata -f dummy_towers.sql
 
       - name: Run tests
+        env:
+          FIREBASE_CREDENTIALS_PATH: Firebase/towermap-b98ee-firebase-adminsdk-fbsvc-d502a34283.json
         run: |
           cd ./TowerMap/
-          python manage.py runserver
+          python manage.py test
