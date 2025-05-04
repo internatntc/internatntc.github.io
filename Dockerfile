@@ -9,6 +9,6 @@ RUN apt-get update && apt-get install -y gcc libpq-dev
 
 COPY requirements.txt /app/
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r ./TowerMap/requirements.txt
 
 COPY . /app/
