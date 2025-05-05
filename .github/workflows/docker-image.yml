@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+      - log
+      - authentication
       - rbac
 
 jobs:
@@ -73,7 +75,7 @@ jobs:
           DATABASE_NAME: mapdata
           DATABASE_USER: postgres
           DATABASE_PASSWORD: admin
-          DATABASE_HOST: db
+          DATABASE_HOST: localhost
           DATABASE_PORT: 5432
         run: |
           cd ./TowerMap/
@@ -84,7 +86,7 @@ jobs:
         env:
           PGPASSWORD: admin
         run: |
-          psql -U postgres -h db -p 5432 -d mapdata -f dummy_towers.sql
+          psql -U postgres -h localhost -p 5432 -d mapdata -f dummy_towers.sql
 
       - name: Run tests
         env:
