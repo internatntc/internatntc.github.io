@@ -2,38 +2,53 @@ version: '3.9'
 
 services:
   db:
-    image: postgres:15
-    container_name: postgres_container
-    restart: always
+    image: postgres:17
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: mapdata
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./dummy_towers.sql:/docker-entrypoint-initdb.d/dummy_towers.sql
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d mapdata" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   web:
     build: .
-    container_name: django_container
     command: >
-      sh -c "python manage.py migrate &&
-             python manage.py loaddata initial_data.json &&
-             gunicorn your_project_name.wsgi:application --bind 0.0.0.0:8000"
+      sh -c "
+        echo 'Waiting for database...';
+        while ! python TowerMap/manage.py check --database default 2>/dev/null; do
+          sleep 5;
+          echo 'Still waiting...';
+        done;
+        python TowerMap/manage.py migrate;
+        python TowerMap/manage.py load_sql;
+        python TowerMap/manage.py create_default_superuser;
+        python TowerMap/manage.py runserver 0.0.0.0:8000
+      "
     volumes:
       - .:/app
+      - ./dummy_towers.sql:/app/dummy_towers.sql
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      - DATABASE_NAME=mapdata
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=admin
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
+      DATABASE_URL: postgres://postgres:admin@db:5432/mapdata
+      DB_ENGINE: django.db.backends.postgresql
+      DB_NAME: mapdata
+      DB_USER: postgres
+      DB_PASSWORD: admin
+      DB_HOST: db
+      DB_PORT: 5432
+    env_file:
+      - ./TowerMap/.env
 
 volumes:
   postgres_data:
