@@ -179,8 +179,36 @@ LOGIN_URL = "/login/"  # URL to redirect unauthenticated users
 LOGIN_REDIRECT_URL = "map_app:home"  # Redirect after successful login
 LOGOUT_REDIRECT_URL = "authentication:login"  # Redirect after logout
 
+ALLOWED_HOSTS = [
+    '127.0.0.1', 
+    'localhost',
+    'internatntc-github-io.onrender.com'
+]
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# Add your Render domain
 if not DEBUG:
     ALLOWED_HOSTS.extend([
         '.onrender.com',
-        'internatntc-github-io.onrender.com'  # Replace with your actual app name
+        '.internatntc-github-io.onrender.com'  # Replace with your actual app name
     ])
+
+# CSRF settings for your specific domain
+CSRF_TRUSTED_ORIGINS = [
+    'https://internatntc-github-io.onrender.com',
+    'https://*.internatntc-github-io.onrender.com',
+]
+
+# Add Render external hostname to CSRF trusted origins
+if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
+
+# Cookie settings for HTTPS
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
