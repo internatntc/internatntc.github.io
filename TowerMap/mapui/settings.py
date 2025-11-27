@@ -36,8 +36,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-__c6o+-w0w3=s!^tgzmn9t$(%ddheu@q66v+^px!u1sy4dm7it')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
-
 
 # Application definition
 
