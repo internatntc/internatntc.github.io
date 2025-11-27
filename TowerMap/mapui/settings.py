@@ -34,11 +34,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = config('SECRET_KEY')
 
-SECRET_KEY = "django-insecure-__c6o+-w0w3=s!^tgzmn9t$(%ddheu@q66v+^px!u1sy4dm7it"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-__c6o+-w0w3=s!^tgzmn9t$(%ddheu@q66v+^px!u1sy4dm7it')
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 
 # Application definition
@@ -100,12 +98,14 @@ WSGI_APPLICATION = 'mapui.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'mapdata'),
+        'NAME': os.getenv('DB_NAME', 'postgres'),  # Supabase default is 'postgres'
         'USER': os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'admin'),
-        # Defaults to localhost if not set
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),  # Remove default password
+        'HOST': os.getenv('DB_HOST', 'aws-1-ap-northeast-1.pooler.supabase.com'),
+        'PORT': os.getenv('DB_PORT', '6543'),
+        'OPTIONS': {
+            'sslmode': 'require',  # Supabase requires SSL
+        },
     }
 }
 
@@ -178,3 +178,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "/login/"  # URL to redirect unauthenticated users
 LOGIN_REDIRECT_URL = "map_app:home"  # Redirect after successful login
 LOGOUT_REDIRECT_URL = "authentication:login"  # Redirect after logout
+
+if not DEBUG:
+    ALLOWED_HOSTS.extend([
+        '.onrender.com',
+        'internatntc-github-io.onrender.com'  # Replace with your actual app name
+    ])
