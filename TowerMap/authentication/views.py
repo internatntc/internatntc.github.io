@@ -17,7 +17,7 @@ def login_view(request):
     """
     # If user is already authenticated, redirect to appropriate page
     if request.user.is_authenticated:
-        return _redirect_based_on_role(request.user)
+        return _redirect_based_on_role(request)
     
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
@@ -42,7 +42,7 @@ def login_view(request):
                 )
                 
                 messages.success(request, f"Welcome back, {username}!")
-                return _redirect_based_on_role(user)
+                return _redirect_based_on_role(request)
                 
             else:
                 # Log attempt to login to inactive account
@@ -65,10 +65,12 @@ def login_view(request):
     return render(request, "authentication/login.html")
 
 
-def _redirect_based_on_role(user):
+def _redirect_based_on_role(request):
     """
     Determine redirect URL based on user's role hierarchy
     """
+    user = request.user
+    
     try:
         user_role = user.role_assignment.role
         
@@ -82,20 +84,19 @@ def _redirect_based_on_role(user):
         
         # Get the redirect URL or default to towers view
         redirect_name = role_redirects.get(user_role.hierarchy_level, "map_app:show_towers")
-        return redirect("authentication:login_view")
+        return redirect(redirect_name)
         
     except (AttributeError, UserRole.DoesNotExist):
         # User has no role assigned
-        except self.RelatedObjectDoesNotExist:
-            log_activity(
-                request=request, # IMPORTANT: Added 'request=request' for the log_activity call
-                action='LOGIN_NO_ROLE',
-                details=f"User {user.username} logged in but has no role assigned"
-            )
-            messages.warning(
-                request, "You don't have any role assigned. Please contact administrator."
-            )
-            return redirect("authentication:login_view")
+        log_activity(
+            request=request,
+            action='LOGIN_NO_ROLE',
+            details=f"User {user.username} logged in but has no role assigned"
+        )
+        messages.warning(
+            request, "You don't have any role assigned. Please contact administrator."
+        )
+        return redirect("authentication:login_view")
 
 
 def logout_view(request):
@@ -199,6 +200,7 @@ def create_user(request):
                     )
 
                     # Assign role if provided
+                    role = None
                     if role_id:
                         role = Role.objects.get(id=role_id)
                         UserRole.objects.create(user=user, role=role)
@@ -208,7 +210,7 @@ def create_user(request):
                         request=request,
                         action='USER_CREATED',
                         target_user=user,
-                        details=f"Created user {username} with role {role.name if role_id else 'No role'}"
+                        details=f"Created user {username} with role {role.name if role else 'No role'}"
                     )
 
                     messages.success(request, f"User {username} created successfully.")
