@@ -306,7 +306,7 @@ def activity_logs(request):
             ('role_assignments', 'Role Assignments'),
         ]
     }
-    return render(request, 'rbac/activity_logs.html', context)            )
+    return render(request, 'rbac/activity_logs.html', context)            
             log_activity(
                 request,
                 'ROLE_CREATE',
