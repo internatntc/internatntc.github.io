@@ -86,15 +86,16 @@ def _redirect_based_on_role(user):
         
     except (AttributeError, UserRole.DoesNotExist):
         # User has no role assigned
-        log_activity(
-            request=request, # IMPORTANT: Added 'request=request' for the log_activity call
-            action='LOGIN_NO_ROLE',
-            details=f"User {user.username} logged in but has no role assigned"
-        )
-        messages.warning(
-            request, "You don't have any role assigned. Please contact administrator."
-        )
-        return redirect("authentication:login_view")
+        except self.RelatedObjectDoesNotExist:
+            log_activity(
+                request=request, # IMPORTANT: Added 'request=request' for the log_activity call
+                action='LOGIN_NO_ROLE',
+                details=f"User {user.username} logged in but has no role assigned"
+            )
+            messages.warning(
+                request, "You don't have any role assigned. Please contact administrator."
+            )
+            return redirect("authentication:login_view")
 
 
 def logout_view(request):
