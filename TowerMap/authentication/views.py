@@ -87,7 +87,7 @@ def _redirect_based_on_role(request):
         return redirect(redirect_name)
         
     except (AttributeError, UserRole.DoesNotExist):
-        # User has no role assigned
+        # User has no role assigned - redirect to a safe page instead of login
         log_activity(
             request=request,
             action='LOGIN_NO_ROLE',
@@ -96,7 +96,8 @@ def _redirect_based_on_role(request):
         messages.warning(
             request, "You don't have any role assigned. Please contact administrator."
         )
-        return redirect("authentication:login_view")
+        # Redirect to a safe default page instead of login to avoid infinite loop
+        return redirect("map_app:show_towers")  # Or create a "no_role" page
 
 
 def logout_view(request):
