@@ -82,7 +82,7 @@ def _redirect_based_on_role(user):
         
         # Get the redirect URL or default to towers view
         redirect_name = role_redirects.get(user_role.hierarchy_level, "map_app:show_towers")
-        return redirect(redirect_name)
+        return redirect("authentication:login_view")
         
     except (AttributeError, UserRole.DoesNotExist):
         # User has no role assigned
